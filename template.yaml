@@ -9,10 +9,10 @@ Resources:
       CodeUri: .
       Environment:
         Variables:
-          RDS_HOST: !Ref RdsHost
-          DB_USERNAME: !Ref DbUsername
-          DB_PASSWORD: !Ref DbPassword
-          DB_NAME: !Ref DbName
+          RDS_HOST: "portal-ex-colab.cn2i04a6agxy.us-east-1.rds.amazonaws.com"
+          DB_USERNAME: "postgres"
+          DB_PASSWORD: "Koda020116"
+          DB_NAME: "postgres"
       VpcConfig:
         SubnetIds:
           - subnet-07daf515b678c9259
