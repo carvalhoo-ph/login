@@ -1,6 +1,7 @@
 import json
 import psycopg2
 import os
+import config
 
 def lambda_handler(event, context):
     # Obter o CPF do evento
@@ -13,10 +14,10 @@ def lambda_handler(event, context):
 
     # Conexão com o banco de dados
     connection = psycopg2.connect(
-        host=os.environ['RDS_HOST'],
-        user=os.environ['DB_USERNAME'],
-        password=os.environ['DB_PASSWORD'],
-        dbname=os.environ['DB_NAME']
+        host=config.rds_host,
+        user=config.db_username,
+        password=config.db_password,
+        dbname=config.db_name
     )
 
     try:

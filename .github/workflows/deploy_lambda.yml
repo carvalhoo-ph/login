@@ -27,6 +27,7 @@ jobs:
         run: |
           mkdir -p package
           cp lambda_function.py package/
+          cp config.py package/
           cd package
           zip -r ../lambda_function.zip .
 
