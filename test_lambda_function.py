@@ -10,7 +10,7 @@ os.environ['DB_PASSWORD'] = 'Koda020116'
 os.environ['DB_NAME'] = 'portal_ex_colab'
 
 def test_lambda_handler_valid_cpf(mocker):
-    event = {'cpf': '12345678901'}
+    event = {'queryStringParameters': {'cpf': '12345678901'}}
     context = {}
     
     # Mockar a conexão com o banco de dados e a execução da query
@@ -27,7 +27,7 @@ def test_lambda_handler_valid_cpf(mocker):
     assert json.loads(response['body']) == {'valid': True, 'senha': 'Senha123'}
 
 def test_lambda_handler_invalid_cpf(mocker):
-    event = {'cpf': '00000000000'}
+    event = {'queryStringParameters': {'cpf': '00000000000'}}
     context = {}
     
     # Mockar a conexão com o banco de dados e a execução da query
@@ -41,11 +41,22 @@ def test_lambda_handler_invalid_cpf(mocker):
     
     response = lambda_handler(event, context)
     assert response['statusCode'] == 404
-    assert json.loads(response['body']) == {'valid': False}
+    assert json.loads(response['body']) == 'CPF não encontrado'
 
 def test_lambda_handler_no_cpf():
-    event = {}
+    event = {'queryStringParameters': {}}
     context = {}
     response = lambda_handler(event, context)
     assert response['statusCode'] == 400
     assert json.loads(response['body']) == 'CPF não fornecido'
+
+def test_lambda_handler_server_error(mocker):
+    event = {'queryStringParameters': {'cpf': '12345678901'}}
+    context = {}
+    
+    # Mockar a conexão com o banco de dados para lançar uma exceção
+    mocker.patch('psycopg2.connect', side_effect=Exception('Erro no servidor'))
+    
+    response = lambda_handler(event, context)
+    assert response['statusCode'] == 500
+    assert json.loads(response['body']) == 'Erro no servidor: Erro no servidor'
