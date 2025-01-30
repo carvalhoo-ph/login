@@ -23,19 +23,19 @@ def lambda_handler(event, context):
     try:
         with connection.cursor() as cursor:
             # Verificar se o CPF existe na tabela ex_funcionarios
-            sql = "SELECT * FROM ex_funcionarios WHERE cpf = %s"
+            sql = "SELECT senha FROM ex_funcionarios WHERE cpf = %s"
             cursor.execute(sql, (cpf,))
             result = cursor.fetchone()
 
             if result:
                 return {
                     'statusCode': 200,
-                    'body': json.dumps('CPF válido')
+                    'body': json.dumps({'valid': True, 'senha': result[0]})
                 }
             else:
                 return {
                     'statusCode': 404,
-                    'body': json.dumps('CPF não encontrado')
+                    'body': json.dumps({'valid': False})
                 }
     finally:
         connection.close()
