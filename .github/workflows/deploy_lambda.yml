@@ -60,4 +60,5 @@ jobs:
 
       - name: Run unit tests
         run: |
+          python -m pip install pytest pytest-mock
           python -m pytest test_lambda_function.py
